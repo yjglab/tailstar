@@ -112,3 +112,108 @@ interface Itf {
   func3: () => void;
 }
 const obj6: Itf = { func1() {}, func2() {}, func3() {} };
+
+// 객체 내 잉여 속성 검사
+interface Itf1 {
+  a: string;
+}
+const obj7 = { a: "hi", b: "hello" };
+const obj8: Itf1 = obj7; // 다른 변수를 이용해 대입하는 경우 b에 대한 검사가 무시됨.
+
+/*
+함수에서 매개변수 부분과 메서드의 return이 void인 경우,
+사용할 때 return 값을 void로 하지 않아도 가능. 
+   + 예외로, 함수 자체의 return 값이 void일 때 사용 시 return값은 void여야 함.
+*/
+function func4(callback: () => void): void {}
+func4(() => {
+  return 3;
+});
+interface ItfA {
+  talk: () => void;
+}
+const A: ItfA = {
+  talk() {
+    return "abc";
+  },
+};
+
+// unknown -> type 체킹을 보류함. 나중에 타입을 넣어줄 수 있음
+
+// 타입 가드
+function numOrStr(a: number | string) {
+  if (typeof a === "number") {
+    a.toFixed(5);
+  }
+  if (typeof a === "string") {
+    a.charAt(5);
+  }
+}
+
+// 배열 타입 체킹
+function numOrNumArr(a: number | number[]) {
+  if (Array.isArray(a)) {
+    // number[]
+    a.concat(5);
+  } else {
+    // number
+    a.toFixed(5);
+  }
+}
+numOrNumArr(5);
+numOrNumArr([5, 5, 5]);
+
+// 클래스 인스턴스 체킹 : 인스턴스의 타입 체킹은 클래스명으로 한다.
+class clsA {
+  aaa() {}
+}
+class clsB {
+  bbb() {}
+}
+function clsCheck(param: clsA | clsB) {
+  if (param instanceof clsA) {
+    param.aaa();
+  }
+}
+clsCheck(new clsA());
+
+// type 체킹하는 두 가지 방법
+type T1 = { type: "t1"; aaa: string };
+type T2 = { type: "t2"; bbb: string };
+
+function typeCheck(a: T1 | T2) {
+  if (a.type === "t1") {
+    // 값으로 구분하기 (더 많이 사용)
+    a.type;
+  }
+  if ("aaa" in a) {
+    // 속성 존재 여부로 구분하기
+    a.type;
+  }
+}
+
+// 객체를 만들 때 type 속성을 넣는 습관을 가지면 좋다
+const objTest = {
+  type: "human",
+};
+if (objTest.type === "human") {
+  console.log("ok");
+}
+
+// 커스텀 타입 가드 -> 노션참고
+
+// 속성 변경 막기
+interface I1 {
+  readonly a: string;
+  b: string;
+}
+const aaaa: I1 = { a: "a", b: "b" };
+// aaaa.a = "123"; // 불가
+
+//
+type T0 = { [key: string]: string }; // 어떤 key나 value들의 타입을 string으로
+const var1: T0 = { a: "a", b: "b" };
+
+type T3 = "A" | "B" | "C";
+type T00 = { [key in T3]: number }; // key가 다음 셋중 하나였으면 한다
+const var2: T00 = { B: 2, A: 3, C: 4 };
