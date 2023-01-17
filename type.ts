@@ -172,6 +172,7 @@ class clsB {
 }
 function clsCheck(param: clsA | clsB) {
   if (param instanceof clsA) {
+    // param 객체가 clsA의 인스턴스인가?
     param.aaa();
   }
 }
