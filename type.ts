@@ -122,8 +122,8 @@ const obj8: Itf1 = obj7; // 다른 변수를 이용해 대입하는 경우 b에 
 
 /*
 함수에서 매개변수 부분과 메서드의 return이 void인 경우,
-사용할 때 return 값을 void로 하지 않아도 가능. 
-   + 예외로, 함수 자체의 return 값이 void일 때 사용 시 return값은 void여야 함.
+사용할 때 return 값을 void로 하지 않아도 가능. (이때의 void는 리턴값을 사용하지 않겠다는 뜻)
+   + 단, 함수 자체의 return 값이 void일 때 사용 시 return값은 void여야 함.
 */
 function func4(callback: () => void): void {}
 func4(() => {
@@ -139,6 +139,9 @@ const A: ItfA = {
 };
 
 // unknown -> type 체킹을 보류함. 나중에 타입을 넣어줄 수 있음
+
+// 강제 타입 변환
+A as unknown as number;
 
 // 타입 가드
 function numOrStr(a: number | string) {

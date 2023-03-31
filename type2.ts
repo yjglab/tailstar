@@ -89,9 +89,41 @@ fgen5(C3); // class도 생성자이므로.
 
 /* declare: 남이 만든 코드에 type설정(typing)할 때 사용. */
 
-/* */
-/* */
-/* */
-/* */
-/* */
-/* */
+/* 제네릭 이용한 타입 원리 이해하기 */
+
+interface ctom<T> {
+  forEach(callback: (value: T, index: number) => void): void;
+  map<S>(callback: (value: T) => S): S[];
+  filter<S extends T>(callback: (value: T) => value is S): S[]; // S extends T: S는 T의 부분집합
+}
+const tst1: ctom<number> = [1, 2, 3];
+
+tst1.forEach((item, idx) => {
+  console.log(item, idx);
+  item.toFixed(1);
+});
+tst1.forEach((item) => {
+  console.log(item);
+  return "3";
+});
+
+const tst2: ctom<string> = ["1", "2", "3"];
+
+tst2.forEach((item) => {
+  console.log(item);
+  item.charAt(3);
+});
+tst2.forEach((item) => {
+  console.log(item);
+  return "3";
+});
+
+const tst3 = tst1.map((v) => v + 1); // int[]
+const tst4 = tst1.map((v) => v.toString()); // string[]
+const tst5 = tst1.map((v) => v % 2 === 0); // boolean[]
+
+const tst6 = tst2.map((v) => +v); // str -> int
+
+const tst7 = tst1.filter((v): v is number => v % 2 === 0); // number[]
+const tst8: ctom<number | string> = [1, "2", 3, "4", 5];
+const tst9 = tst8.filter((v): v is string => typeof v === "string"); // string[]
