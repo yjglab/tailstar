@@ -198,4 +198,11 @@ type CP = ConstructorParameters<typeof Cls1>;
 type IT = InstanceType<typeof Cls1>;
 
 const a: Cls1 = new Cls1("BB", 456, false); // 인스턴스(new)
+
+// 변수명을 사용하고 싶은데 이미 선언되어 충돌되는 경우 namespace 사용
+declare namespace Myspace {
+  const alreadyDeclared: string;
+}
+Myspace.alreadyDeclared;
+
 export {};
